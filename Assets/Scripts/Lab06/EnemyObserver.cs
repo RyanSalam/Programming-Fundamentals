@@ -18,11 +18,7 @@ public class EnemyObserver : Observer
         {
             case NotificationType.damaged:
 
-                foreach (var goblin in FindObjectsOfType<Goblin>())
-                {
-                    Debug.Log("notify");
-                    goblin.TargetPlayer();
-                }
+                GetComponent<Goblin>().TargetPlayer();
 
                 break;
         }

@@ -38,7 +38,9 @@ public class Goblin : Subject
 
     private void Update()
     {
-        if (transform.position.x > target.transform.position.x && !flipped || transform.position.x < target.transform.position.x && flipped)
+        
+
+        if ((transform.position.x > target.transform.position.x && !flipped || transform.position.x < target.transform.position.x && flipped) && target != null)
         {
             Flip();
         }
