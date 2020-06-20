@@ -21,6 +21,7 @@ public class PixelController : MonoBehaviour
     private int currentHP;
 
     private bool flipped;
+    private bool dead;
 
     private void Start()
     {
@@ -48,7 +49,22 @@ public class PixelController : MonoBehaviour
         currentHP -= amount;
 
         if (currentHP <= 0)
+        {
             currentHP = 0;
+            Death();
+        }
+
+        
+            
+    }
+
+    void Death()
+    {
+        if (dead)
+            return;
+
+        dead = true;
+        anim.SetTrigger("dead");
     }
 
     void Flip()
@@ -71,6 +87,9 @@ public class PixelController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (dead)
+            return;
+
         Vector2 move = new Vector2(
             Input.GetAxis("Horizontal"),
             Input.GetAxis("Vertical"));
