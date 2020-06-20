@@ -127,4 +127,4 @@ public class Pathfinding : MonoBehaviour
 
 }
 
-public enum EnemyState { Idle, Moving}
+public enum EnemyState { Idle, Moving, Attacking}
