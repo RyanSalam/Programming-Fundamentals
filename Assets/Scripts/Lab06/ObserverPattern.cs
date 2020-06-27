@@ -13,7 +13,20 @@ public abstract class Subject : MonoBehaviour
 
     public void RegisterObserver(Observer observer)
     {
+        if (observers.Contains(observer))
+            return;
+
         observers.Add(observer);
+    }
+
+    public void RemoveObserver(Observer observer)
+    {
+        observers.Remove(observer);
+    }
+
+    public void ClearObservers()
+    {
+        observers.Clear();
     }
 
     public void Notify(GameObject obj, NotificationType type)
@@ -25,4 +38,4 @@ public abstract class Subject : MonoBehaviour
     }
 }
 
-public enum NotificationType { damaged}
+public enum NotificationType { damaged, death, respawn}

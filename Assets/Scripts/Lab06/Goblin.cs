@@ -38,14 +38,17 @@ public class Goblin : Subject
 
     private void Update()
     {
-        
+        anim.SetBool("move", state == EnemyState.Moving);
+
+        if (target == null)
+            return;
 
         if ((transform.position.x > target.transform.position.x && !flipped || transform.position.x < target.transform.position.x && flipped) && target != null)
         {
             Flip();
         }
 
-        anim.SetBool("move", state == EnemyState.Moving);
+        
     }
 
     private void FixedUpdate()
@@ -134,10 +137,46 @@ public class Goblin : Subject
         return waypoints[rand];
     }
 
+    private void TakeDamage()
+    {
+        currentHP -= 5;
+
+        if (currentHP <= 0)
+        {
+            gameObject.SetActive(false);
+            ObjectPooler.instance.AddToPool(this.tag, gameObject);
+        }
+    }
+
+    private void Death()
+    {
+        gameObject.SetActive(false);
+        ObjectPooler.instance.AddToPool(this.tag, gameObject);
+
+        Notify(this.gameObject, NotificationType.death);               
+    }
+
+    public void Respawn()
+    {
+        state = EnemyState.Idle;
+        currentHP = maxHP;
+        target = null;
+
+        //Registering all present observers to this subject's list.
+        foreach(Observer observer in FindObjectsOfType<Observer>())
+        {
+            RegisterObserver(observer);
+        }
+
+        // Notifies all other subjects to register this observer to their list.
+        Notify(gameObject, NotificationType.respawn);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("pAttack"))
         {
+            TakeDamage();
             Notify(collision.transform.parent.gameObject, NotificationType.damaged);
             Debug.Log("hit");
         }
